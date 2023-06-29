@@ -6,10 +6,10 @@ app.secret_key = 'your-secret-key'  # Change this to a secure key
 mysql = MySQL()
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = 'your-mysql-username'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'your-mysql-password'
-app.config['MYSQL_DATABASE_DB'] = 'your-mysql-database'
-app.config['MYSQL_DATABASE_HOST'] = 'your-mysql-host'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
+app.config['MYSQL_DATABASE_DB'] = 'pythontest'
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
 
 
@@ -19,7 +19,7 @@ def home():
         email = session['email']
         return render_template('home.html', email=email)
     else:
-        return 'You are not logged in'
+        return render_template('login.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -52,6 +52,10 @@ def signup():
         
         conn = mysql.connect()
         cursor = conn.cursor()
+        query = 'create table if not exists users (email varchar(30) primary key, name varchar(20), ' \
+                'password varchar(30)) '
+        cursor.execute(query)
+        # print("Created ")
         
         cursor.execute("INSERT INTO users (email, name, password) VALUES (%s, %s, %s)", (email, name, password))
         conn.commit()
@@ -69,4 +73,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
