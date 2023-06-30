@@ -66,8 +66,7 @@ def edit(book_id):
         author = request.form['author']
         year = request.form['year']
 
-        cursor.execute("UPDATE bookset SET title = %s, author = %s, year = %s WHERE book_id = %s",
-                       (title, author, year, book_id))
+        cursor.execute("UPDATE bookset SET title = %s, author = %s, year = %s WHERE book_id = %s",(title, author, year, book_id))
         conn.commit()
         conn.close()
 
